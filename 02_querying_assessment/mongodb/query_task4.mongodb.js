@@ -1,3 +1,4 @@
+use("chrome-burger-db");
 // Task 4: Total Revenue Summary
 // At the end of the trading period, the owner wants a single figure that shows how much revenue
 // the truck has generated across all recorded orders. This number will be used in their
@@ -5,9 +6,14 @@
 //
 // Hint: Write an aggregation query on the orders collection to calculate the total revenue from all orders combined.
 // The result should be a single document with a field named total_revenue.
+db.orders.aggregate([
+  { $group: { _id: null, total_revenue: { $sum: "$total_price" } } },
+]);
 
 // Bonus: The dataset is identical in the PostgreSQL database, meaning the same business insight can be retrieved.
 // Write the equivalent query for PostgreSQL. See query_task4_bonus.sql
+//SELECT SUM(total_price) AS total_revenue
+//FROM orders;
 
 // ---------------------------------------------------------------
 // Your thinking process (required)
@@ -18,4 +24,6 @@
 // Write in English or Thai. Do not skip this step.
 //
 // Your thinking:
-//
+//โจทย์ให้คำนวณรายได้รวม จากทุกออเดอร์เพื่อใช้ใน financial summary report  ข้อมูลที่จะเอามาใช้คือ orders และใช้ aggregation
+//.aggregate ()  และใช้ $group  กำหนดค่า _id: null เพื่อสั่งให้ระบบยุบรวมข้อมูลจากทุกเอกสารเข้ามาเป็นกลุ่มเดียวกันทั้งหมด
+//ใช้$sum เพื่อบวกค่าจากฟิลด์ total_price ของทุกออเดอร์ และกำหนดฟิลด์ผลลัพธ์เป็น total_revenue
